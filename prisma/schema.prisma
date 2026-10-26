@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum TicketStatus {
+  OPEN
+  PENDING
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+model Customer {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  name      String
+  company   String?
+  plan      String?
+  createdAt DateTime @default(now())
+  tickets   Ticket[]
+}
+
+model Agent {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  email           String   @unique
+  name            String
+  active          Boolean  @default(true)
+  assignedTickets Ticket[] @relation("AssignedTickets")
+}
+
+model Ticket {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  number        Int            @unique
+  subject       String
+  status        TicketStatus   @default(OPEN)
+  priority      TicketPriority @default(NORMAL)
+  source        String         @default("email")
+  tags          String[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  firstResponseAt DateTime?
+  resolvedAt    DateTime?
+  customerId    String         @db.ObjectId
+  customer      Customer       @relation(fields: [customerId], references: [id])
+  assigneeId    String?        @db.ObjectId
+  assignee      Agent?         @relation("AssignedTickets", fields: [assigneeId], references: [id])
+  messages      Message[]
+
+  @@index([status, priority, updatedAt])
+  @@index([customerId, createdAt])
+  @@index([assigneeId, status])
+}
+
+model Message {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  body       String
+  authorName String
+  authorType String
+  internal   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  ticketId   String   @db.ObjectId
+  ticket     Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId, createdAt])
+}
