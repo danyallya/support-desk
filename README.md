@@ -20,7 +20,7 @@ Next.js App Router, React, TypeScript, Tailwind CSS, React Icons, Prisma ORM and
 Requirements: Node.js 20.11+, npm and MongoDB 7+.
 
 1. Copy .env.example to .env and set DATABASE_URL for a local MongoDB deployment.
-2. Install dependencies using npm install.
+2. Install dependencies using npm ci.
 3. Generate the Prisma client with npm run db:generate.
 4. Apply the initial document schema with npm run db:push.
 5. Start the workspace using npm run dev and open http://localhost:3000.

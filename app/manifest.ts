@@ -1,2 +1,2 @@
 import type {MetadataRoute} from "next";
-export default function manifest():MetadataRoute.Manifest{return{name:"Northstar Support Desk",short_name:"Northstar",description:"A focused workspace for customer support.",start_url:"/",display:"standalone",background_color:"#10171e",theme_color:"#10171e",icons:[{src:"/icons/northstar.svg",sizes:"any",type:"image/svg+xml",purpose:"any maskable"}]}}
+export default function manifest():MetadataRoute.Manifest{return{name:"Northstar Support Desk",short_name:"Northstar",description:"A focused workspace for customer support.",start_url:"/",display:"standalone",background_color:"#10171e",theme_color:"#10171e",icons:[{src:"/icons/northstar.svg",sizes:"any",type:"image/svg+xml",purpose:"maskable"}]}}
