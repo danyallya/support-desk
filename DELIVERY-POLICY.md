@@ -38,3 +38,7 @@ Historical Day 00/01 entries describe their original workflow. This policy super
 A resolution-transition regression and SLA-time handling require different evidence. Split independently complete fixes when helpful, and avoid a fixed feature/log commit pair.
 
 Next planned scope: Day 02 — reusable dashboard shell, queue states and accessible responsive navigation.
+
+## Contribution evidence
+
+Follow [CONTRIBUTING.md](CONTRIBUTING.md) within the existing delivery scope. Consider a synthetic Resolve/Reopen or SLA boundary case with timezone assumptions. Keep real issue links and agreed coauthor attribution with the matching change. Profile goals do not change commit counts, review gates, day numbering or authorization for external contact/settings/payment.
