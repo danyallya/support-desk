@@ -48,3 +48,7 @@ Nexus returned 404 for packages used by this project. Following the user's appro
 Every day records reviewed code, focused tests, completed scope, debugging, accessibility/responsive/theme checks, verification outcomes, updated docs and a clear next day. Do not invent sent replies or create commits for activity alone.
 
 - Day 01: Done. Ticket status acceptance and workspace authorization/API test contracts are documented. Review found and fixed Resolve incorrectly setting a ticket to Pending; transition rules now have unit coverage. The app still has preview-only controls and no auth/API implementation. Day 02 will complete the dashboard shell and accessible responsive navigation.
+
+## Process change effective Day 02 — 2026-10-27
+
+Apply [DELIVERY-POLICY.md](DELIVERY-POLICY.md) to every remaining ticket: finish Northstar Support before the next repository, use meaningful scope-driven commits and deliver through its own reviewed PR. A blocked external gate needs a concrete record and next action. This adds delivery gates without moving Day 02–30 product work or changing completed history.
