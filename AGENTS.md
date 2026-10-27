@@ -19,3 +19,9 @@ Northstar is an efficient, considerate support workspace for a growing SaaS team
 - Exclude private inbox routes and response bodies from service-worker caches.
 - Use accessible status/priority labels, keyboard shortcuts with visible help, and phone/tablet layouts.
 - Treat email delivery as an integration; never claim a preview reply was sent.
+
+## Delivery from Day 02
+
+- Read and follow [DELIVERY-POLICY.md](DELIVERY-POLICY.md). Finish Northstar Support and its own PR panel review, merge and sync before the next portfolio repository, or record an exact external blocker. No concurrent project or subagent work.
+- Choose commit counts, boundaries, content and wording from this product's real changes; do not copy a fixed history pattern from other projects.
+- Review the latest pushed head and checks in GitHub and merge through this repository's PR panel. Respect required independent approvals; self-review does not replace them.

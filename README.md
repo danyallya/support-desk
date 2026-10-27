@@ -63,3 +63,7 @@ Tests must cover anonymous denial, member/admin workspace isolation, missing-rec
 
 ## Privacy and operations
 Every read, mutation, message, search and export must be scoped to an authenticated workspace. Production setup requires secret management, HTTPS, webhook signature validation, delivery monitoring, retention rules and verified backups. Do not cache customer conversations in the service worker.
+
+## Delivery and review
+
+Northstar review must verify Resolve/Reopen against ticket contracts, preserve auditable message state and workspace isolation, and separate preview replies from confirmed delivery. Follow [DELIVERY-POLICY.md](DELIVERY-POLICY.md) from Day 02 for sequential execution, scope-driven commits and this repository's separate branch/PR with GitHub panel review and merge.
