@@ -13,7 +13,7 @@ Nexus returned 404 for packages used by this project. Following the user's appro
 
 | Day | Deliverable |
 |---|---|
-| 01 | Write support workflow acceptance criteria, authorization matrix and API/test plan. |
+| 01 | Done — define ticket workflow acceptance, authorization matrix and planned API/test contract; correct the Resolve status defect found in review. |
 | 02 | Extract reusable dashboard shell, queue states and accessible responsive navigation. |
 | 03 | Configure Prisma Mongo client, connection lifecycle, indexes and safe synthetic seed. |
 | 04 | Add team authentication and workspace membership; reject cross-workspace access. |
@@ -46,3 +46,5 @@ Nexus returned 404 for packages used by this project. Following the user's appro
 
 ## Completion gate
 Every day records reviewed code, focused tests, completed scope, debugging, accessibility/responsive/theme checks, verification outcomes, updated docs and a clear next day. Do not invent sent replies or create commits for activity alone.
+
+- Day 01: Done. Ticket status acceptance and workspace authorization/API test contracts are documented. Review found and fixed Resolve incorrectly setting a ticket to Pending; transition rules now have unit coverage. The app still has preview-only controls and no auth/API implementation. Day 02 will complete the dashboard shell and accessible responsive navigation.

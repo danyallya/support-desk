@@ -41,5 +41,25 @@ MongoDB stores Customer, Agent, Ticket and Message documents. Ticket records hol
 
 See AGENTS.md for the daily engineering cycle and BACKLOG.md for the full 30-day delivery plan. The local foundation branch is day-00-foundation.
 
+## Day 01 workflow acceptance
+
+- Ticket statuses are Open, Pending, Resolved and Closed. Resolve moves an Open or Pending ticket to Resolved; reopen moves a Resolved or Closed ticket to Open. Invalid transitions are rejected. A successful reply action is not considered delivered until the email integration confirms it.
+- The current `/` route is a local workflow preview: it shows a queue, selected conversation, customer context and reply composer using illustrative records. There are no implemented ticket API routes or authenticated workspace sessions yet.
+- The service worker caches the offline shell, manifest, icon and same-origin static assets. It skips `/api/` and network-only navigation requests, so customer conversation responses are not added to the cache.
+
+## Authorization matrix and API/test plan
+
+| Actor | Queue and customer reads | Ticket changes and replies | Workspace administration |
+|---|---|---|---|
+| Anonymous visitor | Denied | Denied | Denied |
+| Authenticated workspace member | Only records in their active workspace | Only records in their active workspace; validated status changes and audited messages | Denied unless a later capability explicitly grants access |
+| Workspace administrator | Only records in their active workspace | Same workspace boundary; actions remain validated and audited | Membership, roles and settings within their workspace |
+
+The server must derive workspace identity from the authenticated session, never from a caller-supplied workspace ID. Cross-workspace ticket, customer, message, search and export requests must not disclose whether a record exists.
+
+Planned route contract: `GET /api/tickets` lists a workspace-scoped queue with status/search filters and cursor pagination; `GET /api/tickets/:id` returns a scoped conversation and customer context; `PATCH /api/tickets/:id` validates status, assignee, priority and tags; `POST /api/tickets/:id/messages` validates a reply or internal note and records delivery state; `GET /api/customers/:id` returns scoped customer context. These endpoints are contracts for future backlog work, not implemented routes.
+
+Tests must cover anonymous denial, member/admin workspace isolation, missing-record responses, legal and illegal state transitions, filtered pagination, input validation, audit history, internal notes never being emailed, reply delivery retries/idempotency, and service-worker exclusion of private responses. The current Vitest suite is a preview render plus pure status-transition tests; it does not yet prove authorization or email delivery.
+
 ## Privacy and operations
 Every read, mutation, message, search and export must be scoped to an authenticated workspace. Production setup requires secret management, HTTPS, webhook signature validation, delivery monitoring, retention rules and verified backups. Do not cache customer conversations in the service worker.
