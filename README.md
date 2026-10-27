@@ -67,3 +67,7 @@ Every read, mutation, message, search and export must be scoped to an authentica
 ## Delivery and review
 
 Northstar review must verify Resolve/Reopen against ticket contracts, preserve auditable message state and workspace isolation, and separate preview replies from confirmed delivery. Follow [DELIVERY-POLICY.md](DELIVERY-POLICY.md) from Day 02 for sequential execution, scope-driven commits and this repository's separate branch/PR with GitHub panel review and merge.
+
+## Contributions and examples
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for reproducible reports, genuine collaboration and product examples such as a sandbox ticket walkthrough that distinguishes preview from delivery. Contributions follow the product backlog and reviewed PR workflow.
