@@ -9,3 +9,11 @@
 - Database setup: npm run db:generate generated Prisma Client from the local schema. No real database connection or data push was attempted.
 - GitHub: Day 00 foundation commit 7152254 is pushed to both main and day-00-foundation: https://github.com/danyallya/support-desk. Day 01 has not started.
 - Schedule: Day 01 has not started. The next task is Day 01 in BACKLOG.md; wait for the user to trigger that day.
+
+## Day 01 — support workflow contract (2026-10-27, Asia/Tehran)
+
+- Review: inspected the preview queue, ticket actions, Prisma model, PWA caching, tests and prior Git history. Reproduced a defect: Resolve changed an active ticket to Pending.
+- Implementation: Resolve now transitions to Resolved and becomes disabled for resolved/closed tickets. Added a typed, tested status transition helper. Documented the preview route, ticket acceptance, workspace authorization matrix, planned API contract and future security tests in README; marked Day 01 done and queued the accessible shell for Day 02.
+- Checks: `npm test` passed (2 files, 4 tests); `npm run lint`, `npm run typecheck`, `npm run db:generate`, `npm run build`, and `git diff --check` passed. No MongoDB service or real email integration was used.
+- GitHub: implementation/docs commit `1f4d73a` (`feat: validate support ticket status transitions`) was pushed to `day-01/support-workflow-contracts`, fast-forwarded to `main`, and `main` was pushed. This log entry will be included in the final sync.
+- Next: Day 02 — extract the reusable shell and complete accessible responsive navigation and queue states.
