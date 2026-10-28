@@ -32,3 +32,11 @@
 - Documentation-only scope on docs/northstar-support-community; reviewed Markdown and git diff --check. App tests/build are not rerun because runtime behavior is unchanged.
 - External blocker: local browser use is disabled in Work settings. PR creation, panel review and merge remain pending; resume from this branch when browser access is available, inspect existing PRs first, target main and follow all gates.
 - Publication is pre-merge here; the final PR/head/panel/check/merge/sync evidence goes in the workspace DELIVERY-RECEIPTS.md after completion. Next: Day 02 — reusable dashboard shell, queue states and accessible responsive navigation. Wait for the user's day trigger.
+
+## Day 02 — Northstar inbox shell — 2026-10-28
+
+- Reconciled merged PR #1/#2 receipts at main 1d7457a and reviewed prior Resolve contract/tests. Extracted DeskShell, named search, added compact destination links and explicit preview guidance for ownership views/tags/automation/settings. Compact navigation reveals queue before targeting it; mobile detail focus/Back return are implemented for browser review.
+- QueueState distinguishes empty/loading/error presentations; actual local filtering uses empty state without simulating a live request. Status buttons expose pressed state, derived sample counts and Resolved. Corrected the reply action's false queued claim: it now previews locally and retains its draft; no customer contact occurs.
+- Five tests passed after final navigation assertions; lint/typecheck passed. Production build passed once, and a final build after a compact-search CSS adjustment is recorded in the workspace receipt. All eight files locally read before this log; ignored config/build output excluded. Synthetic state/navigation evidence only, no real customer data or badge claim.
+- Work browser disabled: actual queue/detail keyboard, phone/tablet/desktop and theme review, PR creation/exact-head panel Files changed/Checks/conversation review, merge and main sync pending on day-02/northstar-queue-shell. No CI/independent approval claim.
+- Next: finish Day 02 delivery gates, then Day 03 Prisma Mongo client/lifecycle/indexes/seed. Discovered carry-over for Day 09 composer: separate draft state by ticket before durable replies; current draft is shared session preview state.

@@ -71,3 +71,7 @@ Northstar review must verify Resolve/Reopen against ticket contracts, preserve a
 ## Contributions and examples
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for reproducible reports, genuine collaboration and product examples such as a sandbox ticket walkthrough that distinguishes preview from delivery. Contributions follow the product backlog and reviewed PR workflow.
+
+## Day 02 inbox shell
+
+DeskShell shares sidebar/header/search and compact navigation. Queue status buttons report selected state and real sample counts, including Resolved; an empty search uses QueueState, whose loading/error variants are prepared and tested without claiming a live request. Queue/customer/tag/automation/settings links lead to honest preview sections. Compact navigation returns from mobile detail before targeting the queue; detail focuses its heading and Back restores the selected card. Reply preview retains the draft and explicitly queues/sends nothing. Theme stays session-local. Keyboard/focus/responsive/theme behavior still needs browser review, blocked by Work settings. Workspace authorization, live inbox, persistent ownership views and draft storage per ticket remain future service work.
