@@ -14,9 +14,9 @@ Nexus returned 404 for packages used by this project. Following the user's appro
 | Day | Deliverable |
 |---|---|
 | 01 | Done — define ticket workflow acceptance, authorization matrix and planned API/test contract; correct the Resolve status defect found in review. |
-| 02 | Implemented, delivery blocked — DeskShell, queue states/status counts and compact navigation; browser/PR panel gates pending. |
-| 03 | Configure Prisma Mongo client, connection lifecycle, indexes and safe synthetic seed. |
-| 04 | Add team authentication and workspace membership; reject cross-workspace access. |
+| 02 | Merged — DeskShell, queue states/status counts and compact navigation. PR #4 merged at `8fd36ea`; Issue #3 (shared reply draft) and Issue #5 (selected customer/context mismatch) remain open. |
+| 03 | Implemented; delivery blocked — server-only Prisma client lifecycle and loopback-only synthetic seed are in Draft PR #6 against `main`. Existing indexes were reviewed. Applying the schema and verifying two seed runs await local MongoDB. |
+| 04 | **Blocked by Day 03 delivery** — add team authentication and workspace membership; reject cross-workspace access after local Mongo schema and repeat-seed acceptance passes. |
 | 05 | Implement ticket list, status tabs, owner scoping and cursor pagination. |
 | 06 | Add ticket detail, message timeline and internal-note distinctions. |
 | 07 | Implement assignment, priority, status and tag updates with audit history. |
@@ -55,6 +55,6 @@ Apply [DELIVERY-POLICY.md](DELIVERY-POLICY.md) to every remaining ticket: finish
 
 ## Contribution integration — 2026-10-27
 
-Effective Day 02: apply [CONTRIBUTING.md](CONTRIBUTING.md) inside existing tickets. At already scheduled weekly reviews, assess real feedback such as a synthetic Resolve/Reopen or SLA boundary case with timezone assumptions; at documentation/setup tickets, improve a sandbox ticket walkthrough that distinguishes preview from delivery. Day 30 records actual contribution evidence and outstanding external dependencies. No day is renumbered and no quota or badge is a completion criterion. Next scope remains: Day 02 — reusable dashboard shell, queue states and accessible responsive navigation.
+Effective Day 02: apply [CONTRIBUTING.md](CONTRIBUTING.md) inside existing tickets. At already scheduled weekly reviews, assess real feedback such as a synthetic Resolve/Reopen or SLA boundary case with timezone assumptions; at documentation/setup tickets, improve a sandbox ticket walkthrough that distinguishes preview from delivery. Day 30 records actual contribution evidence and outstanding external dependencies. No day is renumbered and no quota or badge is a completion criterion. Next scope remains: Day 03 — Prisma Mongo client, connection lifecycle, existing indexes and safe synthetic seed acceptance.
 
 - Discovery (Day 02, target Day 09): reply draft currently belongs to the session rather than a ticket. Before durable outbound replies, preserve separate drafts per ticket and verify switching cannot send a draft to another requester. No reply is queued/sent by the current preview.

@@ -23,7 +23,8 @@ Requirements: Node.js 20.11+, npm and MongoDB 7+.
 2. Install dependencies using npm ci.
 3. Generate the Prisma client with npm run db:generate.
 4. Apply the initial document schema with npm run db:push.
-5. Start the workspace using npm run dev and open http://localhost:3000.
+5. Optionally load synthetic sample records with npm run db:seed.
+6. Start the workspace using npm run dev and open http://localhost:3000.
 
 The initial schema is ready for the service layer. Workspace authentication, persistence and email delivery arrive through the 30-day roadmap. Never commit .env, real customer data or the local .npmrc.
 
@@ -34,6 +35,7 @@ The initial schema is ready for the service layer. Workspace authentication, per
 - npm run build — production build
 - npm run db:generate — regenerate Prisma client
 - npm run db:push — synchronize local MongoDB schema
+- npm run db:seed — upsert synthetic records into the dedicated local northstar_desk database
 - npm run db:studio — inspect local records
 
 ## Data model
@@ -75,3 +77,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for reproducible reports, genuine collabo
 ## Day 02 inbox shell
 
 DeskShell shares sidebar/header/search and compact navigation. Queue status buttons report selected state and real sample counts, including Resolved; an empty search uses QueueState, whose loading/error variants are prepared and tested without claiming a live request. Queue/customer/tag/automation/settings links lead to honest preview sections. Compact navigation returns from mobile detail before targeting the queue; detail focuses its heading and Back restores the selected card. Reply preview retains the draft and explicitly queues/sends nothing. Theme stays session-local. Keyboard/focus/responsive/theme behavior still needs browser review, blocked by Work settings. Workspace authorization, live inbox, persistent ownership views and draft storage per ticket remain future service work.
+
+## Day 03 Prisma Mongo boundary
+
+`lib/prisma.ts` is a server-only Prisma Client singleton reused across Next.js development hot reloads. Prisma opens connections when queries run; it is not imported by the preview UI. The existing unique indexes and compound indexes cover ticket queue status/priority/update time, customer history, assignee queues and ticket message history; no speculative index was added without measured query plans.
+
+The optional seed accepts only the loopback MongoDB database named `northstar_desk`. It upserts one reserved `.invalid` customer, one sample agent, two fictional tickets and three messages with stable ObjectIds. One message is explicitly an internal note. Seed data is local only and no email is sent. The MongoDB service was unavailable during this Day 03 run, so applying `db:push` and verifying repeat seed behavior remain pending.
+
+Issue #3 (a reply draft shared across tickets) and Issue #5 (selected ticket and customer context disagree) remain open. Durable reply work must keep drafts per ticket and verify the selected customer before the Day 09 composer can send anything.
