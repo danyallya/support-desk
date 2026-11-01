@@ -15,7 +15,7 @@ Nexus returned 404 for packages used by this project. Following the user's appro
 |---|---|
 | 01 | Done — define ticket workflow acceptance, authorization matrix and planned API/test contract; correct the Resolve status defect found in review. |
 | 02 | Merged — DeskShell, queue states/status counts and compact navigation. PR #4 merged at `8fd36ea`; Issue #3 (shared reply draft) and Issue #5 (selected customer/context mismatch) remain open. |
-| 03 | Implemented; delivery blocked — server-only Prisma client lifecycle and loopback-only synthetic seed are in Draft PR #6 against `main`. Existing indexes were reviewed. Applying the schema and verifying two seed runs await local MongoDB. |
+| 03 | Local acceptance complete; PR delivery pending — server-only Prisma client lifecycle and loopback-only synthetic seed are in Draft PR #6 against `main`. A temporary MongoDB 7.0.16 `rs0` replica set applied the schema and indexes; two seed runs kept 1 customer, 1 agent, 2 tickets and 3 messages (1 internal note). Final exact-head panel review and merge remain. |
 | 04 | **Blocked by Day 03 delivery** — add team authentication and workspace membership; reject cross-workspace access after local Mongo schema and repeat-seed acceptance passes. |
 | 05 | Implement ticket list, status tabs, owner scoping and cursor pagination. |
 | 06 | Add ticket detail, message timeline and internal-note distinctions. |

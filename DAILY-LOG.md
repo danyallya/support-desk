@@ -58,3 +58,14 @@
 - Rechecked local MongoDB acceptance: `mongod`, `mongosh`, `mongo` and `docker` are unavailable, no MongoDB Windows service is installed, `127.0.0.1:27017` is unreachable and `.env` is absent. The schema has not been applied with `npm run db:push` and the seed has not been run twice. Day 03 delivery remains blocked, so Day 04 workspace authentication and membership did not start. No application code changed and tests/build were not rerun.
 - Contribution opportunity: none for this blocked request; no outside contact or activity was manufactured. `BACKLOG.md` now marks Day 04 blocked by Day 03 without shifting later items.
 - Next action: start an isolated local MongoDB 7+ replica-set service (`rs0`) on loopback with the dedicated `northstar_desk` database, configure the ignored `.env`, run `npm run db:push` and `npm run db:seed` twice, and verify stable counts. Recheck the exact PR head and gates, then finish Day 03 delivery before starting Day 04 on a later manual trigger.
+
+## Day 04 continuation — Day 03 Mongo acceptance — 2026-11-01, Asia/Tehran
+
+- Resumed `day-03/mongo-client-seed` after fetching `origin`; the branch was clean at `7c1bb683087469ce7ac4b964113bd6772c163ed0` before this acceptance fix. Draft PR #6 still targets `main`.
+- Started an isolated temporary MongoDB 7.0.16 one-member replica set named `rs0`, bound only to `127.0.0.1:27017`, with database `northstar_desk`. `.env` is locally ignored and contains only this loopback URL; no existing/customer data was used.
+- `npx prisma validate`, `npm run db:generate` and `npm run db:push` passed. The push created the four collections and synced the unique/compound indexes from `schema.prisma`.
+- Initial live seed attempts exposed a Prisma validation defect: ticket and message upsert `update` objects included their immutable `id` fields. Added pure seed-shape helpers and regression tests that keep IDs in `where`/`create` but remove them from `update`.
+- After the fix, `npm test -- --maxWorkers=1` passed (5 files / 9 tests); `npm run db:seed` passed twice. Counts stayed stable at 1 customer, 1 agent, 2 tickets and 3 messages, including one internal note. No email was sent.
+- `npm run lint`, `npm run typecheck`, `npm run build` and `git diff --check` passed. The production build remains the static preview and does not establish authenticated persistence; that is Day 04 scope.
+- Contribution review: the synthetic internal-note sample remains a useful reproducible fixture; no external issue, outreach, collaboration or badge claim was warranted.
+- Next: update/push the seed fix and Day 03 acceptance docs on the existing branch, re-review the exact PR #6 head in Files changed, Checks and Conversation, merge through GitHub if permitted, synchronize local `main`, then begin Day 04 on its own branch. Day 05 remains manual.

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { assertSafeSeedTarget } from './seed-policy.mjs';
+import { makeMessageUpsertData, makeTicketUpsertData } from './seed-data.mjs';
 
 assertSafeSeedTarget(process.env.DATABASE_URL);
 
@@ -89,18 +90,20 @@ async function upsertSampleData() {
     create: sampleAgent,
   });
 
-  for (const { messages, ...ticket } of sampleTickets) {
+  for (const sampleTicket of sampleTickets) {
+    const { id, update, create, messages } = makeTicketUpsertData(sampleTicket);
     await prisma.ticket.upsert({
-      where: { id: ticket.id },
-      update: ticket,
-      create: ticket,
+      where: { id },
+      update,
+      create,
     });
 
     for (const message of messages) {
+      const { id: messageId, update, create } = makeMessageUpsertData(message, id);
       await prisma.message.upsert({
-        where: { id: message.id },
-        update: { ...message, ticketId: ticket.id },
-        create: { ...message, ticketId: ticket.id },
+        where: { id: messageId },
+        update,
+        create,
       });
     }
   }
