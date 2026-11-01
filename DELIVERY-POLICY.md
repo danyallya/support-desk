@@ -37,7 +37,7 @@ Historical Day 00/01 entries describe their original workflow. This policy super
 
 A resolution-transition regression and SLA-time handling require different evidence. Split independently complete fixes when helpful, and avoid a fixed feature/log commit pair.
 
-Next planned scope: Day 03 — Prisma Mongo client, connection lifecycle, existing indexes and safe synthetic seed acceptance.
+Next planned scope: Day 04 — agent sign-in, session lifecycle, workspace membership and workspace-scoped reads.
 
 ## Contribution evidence
 

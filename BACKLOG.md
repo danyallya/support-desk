@@ -15,8 +15,8 @@ Nexus returned 404 for packages used by this project. Following the user's appro
 |---|---|
 | 01 | Done — define ticket workflow acceptance, authorization matrix and planned API/test contract; correct the Resolve status defect found in review. |
 | 02 | Merged — DeskShell, queue states/status counts and compact navigation. PR #4 merged at `8fd36ea`; Issue #3 (shared reply draft) and Issue #5 (selected customer/context mismatch) remain open. |
-| 03 | Local acceptance complete; PR delivery pending — server-only Prisma client lifecycle and loopback-only synthetic seed are in Draft PR #6 against `main`. A temporary MongoDB 7.0.16 `rs0` replica set applied the schema and indexes; two seed runs kept 1 customer, 1 agent, 2 tickets and 3 messages (1 internal note). Final exact-head panel review and merge remain. |
-| 04 | **Blocked by Day 03 delivery** — add team authentication and workspace membership; reject cross-workspace access after local Mongo schema and repeat-seed acceptance passes. |
+| 03 | Merged — server-only Prisma client lifecycle and loopback-only synthetic seed. PR #6 merged at `3f0f32b`; repeat-seed acceptance and the final delivery receipt are recorded in the project log and portfolio receipts. |
+| 04 | Implementation and local acceptance complete — provisioned agent sign-in, expiring sessions and workspace-scoped reads; final PR review and merge pending. |
 | 05 | Implement ticket list, status tabs, owner scoping and cursor pagination. |
 | 06 | Add ticket detail, message timeline and internal-note distinctions. |
 | 07 | Implement assignment, priority, status and tag updates with audit history. |
@@ -55,6 +55,10 @@ Apply [DELIVERY-POLICY.md](DELIVERY-POLICY.md) to every remaining ticket: finish
 
 ## Contribution integration — 2026-10-27
 
-Effective Day 02: apply [CONTRIBUTING.md](CONTRIBUTING.md) inside existing tickets. At already scheduled weekly reviews, assess real feedback such as a synthetic Resolve/Reopen or SLA boundary case with timezone assumptions; at documentation/setup tickets, improve a sandbox ticket walkthrough that distinguishes preview from delivery. Day 30 records actual contribution evidence and outstanding external dependencies. No day is renumbered and no quota or badge is a completion criterion. Next scope remains: Day 03 — Prisma Mongo client, connection lifecycle, existing indexes and safe synthetic seed acceptance.
+Effective Day 02: apply [CONTRIBUTING.md](CONTRIBUTING.md) inside existing tickets. At already scheduled weekly reviews, assess real feedback such as a synthetic Resolve/Reopen or SLA boundary case with timezone assumptions; at documentation/setup tickets, improve a sandbox ticket walkthrough that distinguishes preview from delivery. Day 30 records actual contribution evidence and outstanding external dependencies. No day is renumbered and no quota or badge is a completion criterion. Next scope remains: Day 04 — agent authentication, membership and workspace-scoped reads.
 
 - Discovery (Day 02, target Day 09): reply draft currently belongs to the session rather than a ticket. Before durable outbound replies, preserve separate drafts per ticket and verify switching cannot send a draft to another requester. No reply is queued/sent by the current preview.
+
+## Day 04 authentication and workspace isolation
+
+The sample agent is provisioned only by the loopback seed using `NORTHSTAR_SAMPLE_PASSWORD`; no sign-up or real customer data is involved. `/sign-in` establishes a hashed, expiring server session only after verifying the agent's active membership in the requested workspace slug. `/workspace` and read-only ticket/customer APIs derive scope from that session and return no records without matching workspace IDs. The public `/` inbox remains synthetic; no reply is queued or sent. Rate limits, invitations, password reset and write APIs remain later work.

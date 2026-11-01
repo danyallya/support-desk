@@ -1,22 +1,32 @@
 import { PrismaClient } from '@prisma/client';
 import { assertSafeSeedTarget } from './seed-policy.mjs';
 import { makeMessageUpsertData, makeTicketUpsertData } from './seed-data.mjs';
+import { hashPassword } from '../lib/password-hash.mjs';
 
 assertSafeSeedTarget(process.env.DATABASE_URL);
+const samplePasswordHash = await hashPassword(process.env.NORTHSTAR_SAMPLE_PASSWORD ?? '');
 
 const prisma = new PrismaClient();
+const sampleWorkspace = {
+  id: 'cccccccccccccccccccccccc',
+  slug: 'northstar-sample',
+  name: 'Northstar Sample Workspace',
+};
+const sampleMembershipId = 'dddddddddddddddddddddddd';
 const sampleCustomer = {
   id: 'aaaaaaaaaaaaaaaaaaaaaaaa',
   email: 'sample.customer@northstar.invalid',
   name: 'Jordan Sample',
   company: 'Northstar Demo Workspace',
   plan: 'Sample',
+  workspaceId: sampleWorkspace.id,
 };
 const sampleAgent = {
   id: 'bbbbbbbbbbbbbbbbbbbbbbbb',
   email: 'sample.agent@northstar.invalid',
   name: 'Casey Sample',
   active: true,
+  passwordHash: samplePasswordHash,
 };
 const sampleTickets = [
   {
@@ -32,6 +42,7 @@ const sampleTickets = [
     firstResponseAt: new Date('2026-10-27T09:15:00.000Z'),
     customerId: sampleCustomer.id,
     assigneeId: sampleAgent.id,
+    workspaceId: sampleWorkspace.id,
     messages: [
       {
         id: '333333333333333333333333',
@@ -64,6 +75,7 @@ const sampleTickets = [
     firstResponseAt: new Date('2026-10-28T13:20:00.000Z'),
     customerId: sampleCustomer.id,
     assigneeId: sampleAgent.id,
+    workspaceId: sampleWorkspace.id,
     messages: [
       {
         id: '555555555555555555555555',
@@ -78,16 +90,28 @@ const sampleTickets = [
 ];
 
 async function upsertSampleData() {
+  await prisma.workspace.upsert({
+    where: { id: sampleWorkspace.id },
+    update: { slug: sampleWorkspace.slug, name: sampleWorkspace.name },
+    create: sampleWorkspace,
+  });
+
   await prisma.customer.upsert({
     where: { id: sampleCustomer.id },
-    update: { email: sampleCustomer.email, name: sampleCustomer.name, company: sampleCustomer.company, plan: sampleCustomer.plan },
+    update: { email: sampleCustomer.email, name: sampleCustomer.name, company: sampleCustomer.company, plan: sampleCustomer.plan, workspaceId: sampleWorkspace.id },
     create: sampleCustomer,
   });
 
   await prisma.agent.upsert({
     where: { id: sampleAgent.id },
-    update: { email: sampleAgent.email, name: sampleAgent.name, active: sampleAgent.active },
+    update: { email: sampleAgent.email, name: sampleAgent.name, active: sampleAgent.active, passwordHash: sampleAgent.passwordHash },
     create: sampleAgent,
+  });
+
+  await prisma.workspaceMember.upsert({
+    where: { workspaceId_agentId: { workspaceId: sampleWorkspace.id, agentId: sampleAgent.id } },
+    update: { role: 'ADMIN' },
+    create: { id: sampleMembershipId, workspaceId: sampleWorkspace.id, agentId: sampleAgent.id, role: 'ADMIN' },
   });
 
   for (const sampleTicket of sampleTickets) {

@@ -21,43 +21,96 @@ enum TicketPriority {
   URGENT
 }
 
+enum WorkspaceRole {
+  MEMBER
+  ADMIN
+}
+
+model Workspace {
+  id          String            @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String            @unique
+  name        String
+  createdAt   DateTime          @default(now())
+  memberships WorkspaceMember[]
+  customers   Customer[]
+  tickets     Ticket[]
+  sessions    Session[]
+}
+
+model WorkspaceMember {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  workspaceId String        @db.ObjectId
+  agentId     String        @db.ObjectId
+  role        WorkspaceRole @default(MEMBER)
+  createdAt   DateTime      @default(now())
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  agent       Agent         @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, agentId])
+  @@index([agentId, workspaceId])
+}
+
+model Session {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  tokenHash   String    @unique
+  agentId     String    @db.ObjectId
+  workspaceId String    @db.ObjectId
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  agent       Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([agentId, workspaceId, expiresAt])
+}
+
 model Customer {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  name      String
-  company   String?
-  plan      String?
-  createdAt DateTime @default(now())
-  tickets   Ticket[]
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  email       String
+  name        String
+  company     String?
+  plan        String?
+  workspaceId String?    @db.ObjectId
+  createdAt   DateTime   @default(now())
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id])
+  tickets     Ticket[]
+
+  @@unique([workspaceId, email])
+  @@index([workspaceId, createdAt])
 }
 
 model Agent {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  email           String   @unique
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  email           String            @unique
   name            String
-  active          Boolean  @default(true)
-  assignedTickets Ticket[] @relation("AssignedTickets")
+  active          Boolean           @default(true)
+  passwordHash    String?
+  memberships     WorkspaceMember[]
+  sessions        Session[]
+  assignedTickets Ticket[]          @relation("AssignedTickets")
 }
 
 model Ticket {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  number        Int            @unique
-  subject       String
-  status        TicketStatus   @default(OPEN)
-  priority      TicketPriority @default(NORMAL)
-  source        String         @default("email")
-  tags          String[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  number          Int            @unique
+  subject         String
+  status          TicketStatus   @default(OPEN)
+  priority        TicketPriority @default(NORMAL)
+  source          String         @default("email")
+  tags            String[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   firstResponseAt DateTime?
-  resolvedAt    DateTime?
-  customerId    String         @db.ObjectId
-  customer      Customer       @relation(fields: [customerId], references: [id])
-  assigneeId    String?        @db.ObjectId
-  assignee      Agent?         @relation("AssignedTickets", fields: [assigneeId], references: [id])
-  messages      Message[]
+  resolvedAt      DateTime?
+  workspaceId     String?        @db.ObjectId
+  customerId      String         @db.ObjectId
+  workspace       Workspace?     @relation(fields: [workspaceId], references: [id])
+  customer        Customer       @relation(fields: [customerId], references: [id])
+  assigneeId      String?        @db.ObjectId
+  assignee        Agent?         @relation("AssignedTickets", fields: [assigneeId], references: [id])
+  messages        Message[]
 
-  @@index([status, priority, updatedAt])
+  @@unique([workspaceId, number])
+  @@index([workspaceId, status, priority, updatedAt])
   @@index([customerId, createdAt])
   @@index([assigneeId, status])
 }
