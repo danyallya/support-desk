@@ -16,8 +16,8 @@ Nexus returned 404 for packages used by this project. Following the user's appro
 | 01 | Done — define ticket workflow acceptance, authorization matrix and planned API/test contract; correct the Resolve status defect found in review. |
 | 02 | Merged — DeskShell, queue states/status counts and compact navigation. PR #4 merged at `8fd36ea`; Issue #3 (shared reply draft) and Issue #5 (selected customer/context mismatch) remain open. |
 | 03 | Merged — server-only Prisma client lifecycle and loopback-only synthetic seed. PR #6 merged at `3f0f32b`; repeat-seed acceptance and the final delivery receipt are recorded in the project log and portfolio receipts. |
-| 04 | Implementation and local acceptance complete — provisioned agent sign-in, expiring sessions and workspace-scoped reads; final PR review and merge pending. |
-| 05 | Implement ticket list, status tabs, owner scoping and cursor pagination. |
+| 04 | Merged — agent sign-in, expiring sessions and workspace-scoped reads. PR #7 merged as `3e79f303`; the follow-up maintenance PR #8 corrected selected-ticket customer context. |
+| 05 | Done — protected workspace queue with status tabs, all/mine/unassigned ownership filters and stable keyset cursor pagination. |
 | 06 | Add ticket detail, message timeline and internal-note distinctions. |
 | 07 | Implement assignment, priority, status and tag updates with audit history. |
 | 08 | Add full-text/search filters for requester, subject, ID, status and tags. |
@@ -48,6 +48,10 @@ Nexus returned 404 for packages used by this project. Following the user's appro
 Every day records reviewed code, focused tests, completed scope, debugging, accessibility/responsive/theme checks, verification outcomes, updated docs and a clear next day. Do not invent sent replies or create commits for activity alone.
 
 - Day 01: Done. Ticket status acceptance and workspace authorization/API test contracts are documented. Review found and fixed Resolve incorrectly setting a ticket to Pending; transition rules now have unit coverage. The app still has preview-only controls and no auth/API implementation. Day 02 will complete the dashboard shell and accessible responsive navigation.
+
+## Day 05 — workspace ticket queue
+
+The authenticated workspace queue supports All/Open/Pending/Resolved/Closed tabs, Everyone/Assigned to me/Unassigned ownership filters, and deterministic updatedAt/id keyset pagination. The API rejects unknown filters and malformed cursors and derives the workspace and agent from the session on every request. Pagination is capped at 20 rows and uses private no-store responses. The public synthetic preview, ticket mutation and email behavior are unchanged. Day 06: add the protected ticket detail and message timeline, including explicit internal-note labeling.
 
 ## Process change effective Day 02 — 2026-10-27
 
