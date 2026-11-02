@@ -86,7 +86,7 @@ DeskShell shares sidebar/header/search and compact navigation. Queue status butt
 
 The optional seed accepts only the loopback MongoDB database named `northstar_desk`. It upserts one reserved `.invalid` customer, one sample agent, two fictional tickets and three messages with stable ObjectIds. One message is explicitly an internal note. Day 03 acceptance used a temporary MongoDB 7.0.16 one-member `rs0` replica set bound to `127.0.0.1`: `npm run db:push` synchronized the four collections and indexes, and two seed runs kept stable counts (1 customer, 1 agent, 2 tickets, 3 messages, including 1 internal note). Seed data is local only and no email is sent.
 
-Issue #3 (a reply draft shared across tickets) and Issue #5 (selected ticket and customer context disagree) remain open. Durable reply work must keep drafts per ticket and verify the selected customer before the Day 09 composer can send anything.
+Issue #3 (a reply draft shared across tickets) remains open for Day 09 before durable replies are added. Issue #5 was fixed in the public synthetic preview: each ticket has its own customer context and unknown ticket ids render an unavailable state rather than another customer's details. This map is preview fixture data; authenticated workspace reads continue to derive their customer context from the scoped API.
 
 ## Day 04 workspace authentication and isolation
 
