@@ -35,7 +35,7 @@ describe('workspace-scoped read routes', () => {
   it('denies anonymous queue reads before querying tickets', async () => {
     mocks.getWorkspacePrincipal.mockResolvedValue(null);
 
-    const response = await listTickets();
+    const response = await listTickets(new Request('http://localhost/api/tickets'));
 
     expect(response.status).toBe(401);
     expect(response.headers.get('cache-control')).toBe('private, no-store');
@@ -46,15 +46,58 @@ describe('workspace-scoped read routes', () => {
     mocks.getWorkspacePrincipal.mockResolvedValue(principal);
     mocks.ticketFindMany.mockResolvedValue([{ id: '111111111111111111111111', number: 930001 }]);
 
-    const response = await listTickets();
+    const response = await listTickets(new Request('http://localhost/api/tickets'));
 
     expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('private, no-store');
     expect(mocks.ticketFindMany).toHaveBeenCalledWith(expect.objectContaining({
       where: { workspaceId: principal.workspaceId },
-      take: 50,
+      take: 21,
+      orderBy: [{ updatedAt: 'desc' }, { id: 'desc' }],
     }));
-    expect(await response.json()).toEqual({ tickets: [{ id: '111111111111111111111111', number: 930001 }] });
+    expect(await response.json()).toEqual({
+      tickets: [{ id: '111111111111111111111111', number: 930001 }],
+      nextCursor: null,
+    });
+  });
+
+  it('applies status and owner filters inside the workspace boundary', async () => {
+    mocks.getWorkspacePrincipal.mockResolvedValue(principal);
+    mocks.ticketFindMany.mockResolvedValue([]);
+
+    const response = await listTickets(new Request('http://localhost/api/tickets?status=OPEN&owner=mine'));
+
+    expect(response.status).toBe(200);
+    expect(mocks.ticketFindMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { workspaceId: principal.workspaceId, status: 'OPEN', assigneeId: principal.agentId },
+    }));
+  });
+
+  it('returns a bounded page and an opaque cursor when more workspace rows exist', async () => {
+    mocks.getWorkspacePrincipal.mockResolvedValue(principal);
+    const rows = Array.from({ length: 21 }, (_, index) => ({
+      id: `${String(index + 1).padStart(24, '0')}`,
+      updatedAt: new Date(`2026-11-02T12:${String(index).padStart(2, '0')}:00.000Z`),
+    }));
+    mocks.ticketFindMany.mockResolvedValue(rows);
+
+    const response = await listTickets(new Request('http://localhost/api/tickets'));
+    const body = await response.json();
+
+    expect(body.tickets).toHaveLength(20);
+    expect(body.nextCursor).toEqual(expect.any(String));
+    expect(mocks.ticketFindMany).toHaveBeenCalledWith(expect.objectContaining({ take: 21 }));
+  });
+
+  it('rejects unknown filters and malformed cursors without querying records', async () => {
+    mocks.getWorkspacePrincipal.mockResolvedValue(principal);
+
+    const badStatus = await listTickets(new Request('http://localhost/api/tickets?status=URGENT'));
+    const badCursor = await listTickets(new Request('http://localhost/api/tickets?cursor=bad'));
+
+    expect(badStatus.status).toBe(400);
+    expect(badCursor.status).toBe(400);
+    expect(mocks.ticketFindMany).not.toHaveBeenCalled();
   });
 
   it('returns the same not-found result when a ticket belongs to another workspace', async () => {
