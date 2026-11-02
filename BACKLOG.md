@@ -62,3 +62,8 @@ Effective Day 02: apply [CONTRIBUTING.md](CONTRIBUTING.md) inside existing ticke
 ## Day 04 authentication and workspace isolation
 
 The sample agent is provisioned only by the loopback seed using `NORTHSTAR_SAMPLE_PASSWORD`; no sign-up or real customer data is involved. `/sign-in` establishes a hashed, expiring server session only after verifying the agent's active membership in the requested workspace slug. `/workspace` and read-only ticket/customer APIs derive scope from that session and return no records without matching workspace IDs. The public `/` inbox remains synthetic; no reply is queued or sent. Rate limits, invitations, password reset and write APIs remain later work.
+
+## Verified issue follow-up — 2026-11-01
+
+- Issue #5: fixed the preview context mismatch by binding customer details and the team note to the selected ticket fixture; added a two-ticket switching regression and unknown-ticket empty-context test. Resolve after the maintenance PR is merged.
+- Issue #3: remains scheduled for Day 09; drafts are still session-local preview state and no reply is delivered.
